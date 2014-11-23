@@ -121,39 +121,38 @@ The following features were selected (86 variables/features):
 
 Now we need to merge together the labels of the activities with the files *y_train.txt* and *y_test.txt* (that are already merged in the variable named **one_train_test_label**).
 
-```{r}
-labels <- merge(x=activities, y=one_train_test_label, by="V1", all.y=TRUE)
-```
-
-
 Now we bind all the columns together of the previous merged variables:
 
 ```{r tidy=FALSE}
 tidy_data <- cbind(tidy_data, one_train_test_subject)
-tidy_data <- cbind(tidy_data, label=labels)
+tidy_data <- cbind(tidy_data, one_train_test_label)
 ```
 
 
 Define appropriate names for the columns in the data set:
 
 ```{r}
-colnames(tidy_data) <- c(as.character(selectedFeatures$V2), "subjectID", "activityID", "label") 
+colnames(tidy_data) <- c(as.character(selectedFeatures$V2), "subjectID", "activityID") 
 ```
 
-Transform some variables into factors in order to summarize the mean for subject and labels (as requested for the new independent tidy data set):
+Transform some variables into factors in order to summarize the mean for subject and activities (as requested for the new independent tidy data set):
 
 ```{r tidy=FALSE}
-tidy_data_final <- transform(tidy_data, subjectID=factor(subjectID), activityID=factor(activityID), label=factor(label))
-colnames(tidy_data_final) <- c(as.character(selectedFeatures$V2), "subjectID", "activityID", "label") 
+tidy_data_final <- transform(tidy_data, subjectID=factor(subjectID), activityID=factor(activityID))
 ```
 
 We reapplied the previous column names to this data set as well.
 
-Then we just aggregate on the data and produce the tidy data file (ordered by subjectID and label):
+Then we just aggregate on the data and produce the tidy data file (ordered by subjectID and label). We still have to put the label names in the data set:
 
 ```{r tidy=FALSE}
-tidy_data_final <-  aggregate(. ~ subjectID + activityID + label, FUN = mean, data=tidy_data_final)
+tidy_data_final <-  aggregate(. ~ subjectID + activityID, FUN = mean, data=tidy_data_final)
+tidy_data_final <- merge(x=tidy_data_final, y=activities, by.x="activityID", by.y="V1")
+
+colnames(tidy_data_final)[89]=c("label")
 tidy_data_final <- tidy_data_final[order(as.integer(tidy_data_final$subjectID), as.character(tidy_data_final$label)),]
+
+tidy_data_final <- tidy_data_final[, c("subjectID", "label", as.character(selectedFeatures$V2))]
 
 write.table(tidy_data_final, "final_data.txt", row.names=F)
 ```
@@ -164,3 +163,6 @@ The produced data set contains:
 - activityID, ranging from 1 to 6;
 - label, related or same as activityID, but with a more meaningful description: LAYING, SITTING, STANDING, WALKING, WALKING_DOWNSTAIRS, WALKING_UPSTAIRS.
 
+Our final data set is:
+- 180 rows
+- 88 variables
