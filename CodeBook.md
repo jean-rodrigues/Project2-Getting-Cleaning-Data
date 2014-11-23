@@ -160,7 +160,6 @@ write.table(tidy_data_final, "final_data.txt", row.names=F)
 The produced data set contains:
 - mean of 86 features previously selected, grouped by subjectID, activityID/label;
 - subjectID, ranging from 1 to 30;
-- activityID, ranging from 1 to 6;
 - label, related or same as activityID, but with a more meaningful description: LAYING, SITTING, STANDING, WALKING, WALKING_DOWNSTAIRS, WALKING_UPSTAIRS.
 
 Our final data set is:
