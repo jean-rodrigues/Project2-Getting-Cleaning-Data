@@ -2,7 +2,6 @@
 title: "CodeBook"
 author: "Jean Rodrigues"
 date: "Sunday, November 23, 2014"
-output: html_document
 ---
 
 In order to achieve the objective of producing the request tidy data, the following steps were executed:
