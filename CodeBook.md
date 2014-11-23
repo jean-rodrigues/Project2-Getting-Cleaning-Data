@@ -153,7 +153,7 @@ Then we just aggregate on the data and produce the tidy data file (ordered by su
 
 ```{r tidy=FALSE}
 tidy_data_final <-  aggregate(. ~ subjectID + activityID + label, FUN = mean, data=tidy_data_final)
-tidy_data_final <- tidy_data_final[order(tidy_data_final$subjectID, tidy_data_final$label),]
+tidy_data_final <- tidy_data_final[order(as.integer(tidy_data_final$subjectID), as.character(tidy_data_final$label)),]
 
 write.table(tidy_data_final, "final_data.txt", row.names=F)
 ```
